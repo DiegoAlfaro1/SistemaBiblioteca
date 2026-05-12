@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
     'rest_framework',
-    'API'
 ]
 
 REST_FRAMEWORK = {
@@ -48,8 +47,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Detailed description of your API',
+    'TITLE': 'SistemaBiblioteca API',
+    'DESCRIPTION': 'API REST para la gestion de autores, libros, prestamos y usuarios',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SWAGGER_UI_DIST': 'SIDECAR',  # Required for drf-spectacular-sidecar
