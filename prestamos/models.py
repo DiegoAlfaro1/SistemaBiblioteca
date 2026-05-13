@@ -1,9 +1,38 @@
-from tkinter.constants import CASCADE
-
+# Modelo de préstamos y validaciones de negocio.
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
+
 class Prestamo(models.Model):
-    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.CASCADE)
-    libro = models.ForeignKey('libros.Libro', on_delete=models.CASCADE)
-    fecha_prestamo = models.DateField(auto_now_add=True)
+    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT)
+    libro = models.ForeignKey('libros.Libro', on_delete=models.PROTECT)
+    fecha_prestamo = models.DateField(default=timezone.now)
+    fecha_devolucion = models.DateField(null=True, blank=True)
+    devuelto = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.usuario} - {self.libro}"
+
+    def clean(self):
+        # Evita que la fecha de devolución sea anterior a la de préstamo.
+        if self.fecha_devolucion and self.fecha_prestamo:
+            if self.fecha_devolucion < self.fecha_prestamo:
+                raise ValidationError({
+                    'fecha_devolucion': 'La fecha de devolución no puede ser anterior al préstamo.'
+                })
+
+        # Impide prestar el mismo libro si ya existe un préstamo activo.
+        if self.libro_id and not self.devuelto:
+            ya_prestado = Prestamo.objects.filter(
+                libro_id=self.libro_id,
+                devuelto=False,
+            ).exclude(pk=self.pk).exists()
+            if ya_prestado:
+                raise ValidationError({
+                    'libro': 'Este libro ya está prestado actualmente.'
+                })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

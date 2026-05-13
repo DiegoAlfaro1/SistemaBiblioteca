@@ -1,139 +1,111 @@
 # SistemaBiblioteca
 
-Aplicacion en Django para administrar una biblioteca.
+SistemaBiblioteca es una aplicacion Django para administrar una biblioteca.
 
-Sistema que permite la gestion de **autores**, **libros**, **prestamos** y **usuarios** mediante un **API REST** y el uso de una interfaz web.
+Permite gestionar autores, libros, usuarios y prestamos mediante una API REST, ademas de una interfaz web sencilla para administrar los prestamos.
 
-Este sistema fue creado utilizando Windows 11, usando PowerShell como terminal principal.
+## Caracteristicas
+
+- CRUD de autores, libros, usuarios y prestamos desde API REST.
+- Interfaz web para listar, crear, editar y eliminar prestamos.
+- Validaciones de negocio para evitar fechas invalidas y prestamos duplicados sobre el mismo libro.
+- Documentacion de la API con Swagger y OpenAPI.
+- Panel de administracion de Django para gestionar los modelos desde la interfaz nativa.
 
 ## Estructura del proyecto
 
-En lugar de una sola aplicacion `API`, el proyecto se organiza en varias aplicaciones de Django, una por cada entidad del dominio:
-
-```
+```text
 SistemaBiblioteca/
-├── SistemaBiblioteca/      # Configuracion del proyecto
-├── autores/                # App para gestion de autores
-├── libros/                 # App para gestion de libros
-├── prestamos/              # App para gestion de prestamos
-├── usuarios/               # App para gestion de usuarios
-├── venv/                   # Entorno virtual
+├── SistemaBiblioteca/      Configuracion general del proyecto
+├── autores/                Modelo, API y admin de autores
+├── libros/                 Modelo, API y admin de libros
+├── prestamos/              Modelo, API, vistas web y formularios de prestamos
+├── usuarios/               Modelo, API y admin de usuarios
+├── templates/              Plantilla base compartida
+├── db.sqlite3              Base de datos local
 └── manage.py
 ```
 
-## Configuracion de proyecto y entorno
+## Endpoints
 
-### Instalar entorno virtual de python
+### API REST
+
+- `GET /api/autores/`
+- `GET /api/libros/`
+- `GET /api/usuarios/`
+- `GET /api/prestamos/`
+- `GET /api/schema/`
+- `GET /api/docs/`
+
+### Interfaz web
+
+- `GET /prestamos/`
+- `GET /prestamos/nuevo/`
+- `GET /prestamos/<id>/editar/`
+- `GET /prestamos/<id>/eliminar/`
+
+### Panel de administracion
+
+- `GET /admin/`
+
+## Requisitos
+
+- Python 3.11 o superior
+- pip
+- Entorno virtual de Python
+
+## Instalacion
+
+1. Crear el entorno virtual.
 
 ```bash
 python -m venv venv
 ```
 
-### Activar entorno virtual (PowerShell)
+2. Activar el entorno virtual en PowerShell.
 
-```bash
+```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-### Instalar Django
+3. Instalar dependencias.
 
 ```bash
-pip install django
+pip install django djangorestframework drf-spectacular drf-spectacular-sidecar
 ```
 
-### Iniciar proyecto de django en repositorio
+## Como ejecutar el proyecto
+
+1. Aplicar migraciones.
 
 ```bash
-django-admin startproject SistemaBiblioteca .
-```
-
-### Instalar framework REST de django
-
-```bash
-pip install djangorestframework
-```
-
-### Crear las aplicaciones del proyecto
-
-Se crea una aplicacion por cada entidad del dominio:
-
-```bash
-python manage.py startapp autores
-python manage.py startapp libros
-python manage.py startapp prestamos
-python manage.py startapp usuarios
-```
-
-### Registrar aplicaciones en aplicaciones instaladas
-
-En `SistemaBiblioteca/settings.py`:
-
-```python
-INSTALLED_APPS = [
-    ...,
-    'rest_framework',
-    'autores',
-    'libros',
-    'prestamos',
-    'usuarios',
-]
-```
-
-## Configuracion de documentacion de API usando Swagger
-
-### Instalar `drf-spectacular-sidecar`
-
-```bash
-pip install drf-spectacular drf-spectacular-sidecar
-```
-
-`django-rest-swagger` esta deprecada por lo que se usa esta libreria recomendada por la [documentacion oficial de Django REST Framework](https://www.django-rest-framework.org/topics/documenting-your-api/).
-
-### Agregar libreria a aplicaciones instaladas
-
-En `SistemaBiblioteca/settings.py`:
-
-```python
-INSTALLED_APPS = [
-    ...,
-    'drf_spectacular',
-    'drf_spectacular_sidecar',
-]
-
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'SistemaBiblioteca API',
-    'DESCRIPTION': 'API REST para la gestion de autores, libros, prestamos y usuarios',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-    'SWAGGER_UI_DIST': 'SIDECAR',  # Required for drf-spectacular-sidecar
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-}
-```
-
-## Como correr el proyecto
-
-### Aplicar migraciones
-
-```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Crear superusuario
+2. Crear un superusuario para acceder al panel de administracion.
 
 ```bash
 python manage.py createsuperuser
 ```
 
-### Levantar servidor de desarrollo
+3. Iniciar el servidor de desarrollo.
 
 ```bash
 python manage.py runserver
 ```
 
-El servidor quedara disponible en `http://127.0.0.1:8000/`.
+4. Abrir el navegador en la direccion local.
+
+```text
+http://127.0.0.1:8000/
+```
+
+## Notas de uso
+
+- La base de datos local utiliza SQLite y se guarda en `db.sqlite3`.
+- La interfaz web principal de prestamos usa las plantillas dentro de `prestamos/templates/prestamos/`.
+- La documentacion Swagger esta disponible en `http://127.0.0.1:8000/api/docs/`.
+
+## Observacion
+
+Este proyecto esta orientado a desarrollo local. Para despliegue en produccion se recomienda revisar `DEBUG`, `ALLOWED_HOSTS`, la clave secreta y la configuracion de la base de datos.

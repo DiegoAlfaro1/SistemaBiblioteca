@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from .models import Libro
 from .serializers import LibroSerializer
 
+
+# CRUD completo de libros para la API REST.
 class LibroViewSet(viewsets.ModelViewSet):
     queryset = Libro.objects.all().order_by('titulo', 'fecha_publicado')
     serializer_class = LibroSerializer

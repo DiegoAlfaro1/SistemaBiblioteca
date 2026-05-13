@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Libro
 
+
+# Configuración del modelo Libro en el panel de administración.
 @admin.register(Libro)
 class LibroAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'autor', 'fecha_publicado')
