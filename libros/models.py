@@ -1,3 +1,5 @@
+"""Modelos relacionados con libros."""
+
 from django.db import models
 
 

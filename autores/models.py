@@ -1,3 +1,5 @@
+"""Modelos relacionados con autores."""
+
 from django.db import models
 
 

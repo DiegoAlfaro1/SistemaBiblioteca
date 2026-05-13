@@ -1,10 +1,13 @@
-# Modelo de préstamos y validaciones de negocio.
+"""Modelo de préstamos y validaciones de negocio."""
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
 
 class Prestamo(models.Model):
+    """Representa el préstamo de un libro a un usuario."""
+
     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT)
     libro = models.ForeignKey('libros.Libro', on_delete=models.PROTECT)
     fecha_prestamo = models.DateField(default=timezone.now)
@@ -15,6 +18,8 @@ class Prestamo(models.Model):
         return f"{self.usuario} - {self.libro}"
 
     def clean(self):
+        """Valida reglas de negocio antes de guardar el préstamo."""
+
         # Evita que la fecha de devolución sea anterior a la de préstamo.
         if self.fecha_devolucion and self.fecha_prestamo:
             if self.fecha_devolucion < self.fecha_prestamo:
@@ -34,5 +39,7 @@ class Prestamo(models.Model):
                 })
 
     def save(self, *args, **kwargs):
+        """Ejecuta validaciones completas antes de persistir el registro."""
+
         self.full_clean()
         super().save(*args, **kwargs)

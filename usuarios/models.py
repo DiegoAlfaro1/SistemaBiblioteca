@@ -1,3 +1,5 @@
+"""Modelos relacionados con usuarios de la biblioteca."""
+
 from django.db import models
 
 
