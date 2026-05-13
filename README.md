@@ -13,6 +13,7 @@ Permite gestionar autores, libros, usuarios y prestamos mediante una API REST, a
 - Documentacion de la API con Swagger y OpenAPI.
 - Página 404 personalizada en español.
 - Panel de administracion de Django para gestionar los modelos desde la interfaz nativa.
+- Roles simples basados en grupos de Django y permisos administrables desde `/admin/`.
 
 ## Estructura del proyecto
 
@@ -54,6 +55,21 @@ SistemaBiblioteca/
 ### Panel de administracion
 
 - `GET /admin/`
+
+## Roles y permisos
+
+El proyecto usa el sistema nativo de Django para control de acceso.
+
+- `Grupos` se usan como roles simples. Por ejemplo: `Administrador`, `Bibliotecario` o `Consulta`.
+- `Permisos` se asignan a usuarios o grupos desde el panel de administracion.
+- El idioma del panel se configura en español para facilitar su uso.
+
+Para administrar estos datos:
+
+1. Ingrese a `/admin/` con un superusuario.
+2. Abra la seccion de `Grupos` para crear o editar roles.
+3. Abra la seccion de `Permisos` para revisar los permisos disponibles.
+4. Asigne usuarios a los grupos necesarios desde la ficha de usuario.
 
 ## Requisitos
 
