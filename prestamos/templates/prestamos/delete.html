@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar préstamo{% endblock %}
+
+{% block content %}
+<div class="alert alert-warning">
+    <h4>¿Eliminar este préstamo?</h4>
+    <p>
+        Usuario: <strong>{{ prestamo.usuario }}</strong><br>
+        Libro: <strong>{{ prestamo.libro }}</strong><br>
+        Fecha de préstamo: {{ prestamo.fecha_prestamo }}
+    </p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'prestamo_list' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

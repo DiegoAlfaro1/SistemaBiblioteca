@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Préstamo{% endblock %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Editar{% else %}Nuevo{% endif %} préstamo</h2>
+
+{# Errores generales (los que no van pegados a un campo) #}
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+    </div>
+{% endif %}
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger small mt-1">
+                    {{ field.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'prestamo_list' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+    // Agrega clase Bootstrap a todos los inputs/selects
+    document.querySelectorAll('form input, form select, form textarea')
+        .forEach(el => el.classList.add('form-control'));
+</script>
+{% endblock %}
